@@ -123,6 +123,9 @@ void setupWebServer(BmsRelay *bmsRelay) {
     request->send_P(200, "text/html", INDEX_HTML_PROGMEM_ARRAY, INDEX_HTML_SIZE,
                     templateProcessor);
   });
+  webServer.on("/OwieLogo", HTTP_GET, [](AsyncWebServerRequest *request) {
+    request->send(SPIFFS, "/OwieLogo.png", "image/png");
+  });
   webServer.on("/wifi", HTTP_ANY, [](AsyncWebServerRequest *request) {
     switch (request->method()) {
       case HTTP_GET:
@@ -154,20 +157,20 @@ void setupWebServer(BmsRelay *bmsRelay) {
   });
   webServer.on("/settings", HTTP_ANY, [](AsyncWebServerRequest *request) {
     switch (request->method()) {
-    case HTTP_GET:
-      request->send_P(200, "text/html", SETTINGS_HTML_PROGMEM_ARRAY,
-                      SETTINGS_HTML_SIZE, templateProcessor);
-      return;
-    case HTTP_POST:
-      const auto bmsSerialParam = request->getParam("bs", true);
-      if (bmsSerialParam == nullptr) {
-        request->send(400, "text/html", "Invalid BMS Serial number.");
+      case HTTP_GET:
+        request->send_P(200, "text/html", SETTINGS_HTML_PROGMEM_ARRAY,
+                        SETTINGS_HTML_SIZE, templateProcessor);
         return;
-      }
-      Settings->bms_serial = bmsSerialParam->value().toInt();
-      saveSettingsAndRestartSoon();
-      request->send(200, "text/html", "Settings saved, restarting...");
-      return;
+      case HTTP_POST:
+        const auto bmsSerialParam = request->getParam("bs", true);
+        if (bmsSerialParam == nullptr) {
+          request->send(400, "text/html", "Invalid BMS Serial number.");
+          return;
+        }
+        Settings->bms_serial = bmsSerialParam->value().toInt();
+        saveSettingsAndRestartSoon();
+        request->send(200, "text/html", "Settings saved, restarting...");
+        return;
     }
     request->send(404);
   });
