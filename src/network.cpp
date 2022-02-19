@@ -123,9 +123,6 @@ void setupWebServer(BmsRelay *bmsRelay) {
     request->send_P(200, "text/html", INDEX_HTML_PROGMEM_ARRAY, INDEX_HTML_SIZE,
                     templateProcessor);
   });
-  webServer.on("/OwieLogo", HTTP_GET, [](AsyncWebServerRequest *request) {
-    request->send(SPIFFS, "/OwieLogo.png", "image/png");
-  });
   webServer.on("/wifi", HTTP_ANY, [](AsyncWebServerRequest *request) {
     switch (request->method()) {
       case HTTP_GET:
