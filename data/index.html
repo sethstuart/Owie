@@ -15,6 +15,18 @@
             font-size: 1em;
         }
 
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+        }
+
+        li {
+            float: left;
+        }
+
         fieldset {
             background: #4f4f4f;
         }
@@ -237,17 +249,28 @@
                 </tr>
             </table>
             <hr>
-            <form action="/wifi">
-                <button>Wifi Configuration</button>
-            </form>
-            <p></p>
-            <form action="/monitor">
-                <button>Monitor BMS data</button>
-            </form>
-            <p></p>
-            <form action="/settings">
-                <button>Settings</button>
-            </form>
+            <ul>
+                <li>
+                    <form action="/">
+                        <button>Home</button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/monitor">
+                        <button>BMS Console</button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/settings">
+                        <button>Settings</button>
+                    </form>
+                </li>
+                <li>
+                    <form action="/lights">
+                        <button>Lights</button>
+                    </form>
+                </li>
+            </ul>
         </div>
         <div id="homeButton" style="text-align:right;font-size:11px;">
             <hr>
