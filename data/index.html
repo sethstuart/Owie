@@ -155,9 +155,11 @@
     <script>
         function getXhr() {
             const content = document.getElementById("content");
+            const navBar = document.getElementById("navBar");
             const xhr = new XMLHttpRequest();
             xhr.addEventListener("load", function (event) {
                 content.innerHTML = event.target.responseText;
+                navBar.innerHTML = event.target.responseText;
                 rescanContent();
             });
             xhr.addEventListener("error", function (event) {
@@ -172,7 +174,6 @@
             xhr.open(form.getAttribute('method') || 'GET', form.getAttribute('action'));
             const formData = new FormData(form);
             xhr.send(formData);
-            handleNavBar(event);
         }
 
         function handleLinkClick(event) {
@@ -184,17 +185,19 @@
 
         function handleNavBar(event) {
             const form = event.target;
-            const homeButton = document.getElementById("homeButton");
-            if (form.action == null) {
-                homeButton.style.display = "none";
-            } else {
-                homeButton.style.display = "block";
-            }
+            const navBar = document.getElementById("navBar");
+            navBar.style.display = "block";
         }
 
         function rescanContent() {
             const content = document.getElementById('content');
+            const navBar = document.getElementById('navBar');
             Array.from(content.getElementsByTagName('form')).
+                filter(f => !f.hasAttribute('owie_procesed')).forEach((f) => {
+                    f.setAttribute('owie_procesed', '1');
+                    f.addEventListener("submit", handleFormSubmit);
+                });
+            Array.from(navBar.getElementsByTagName('form')).
                 filter(f => !f.hasAttribute('owie_procesed')).forEach((f) => {
                     f.setAttribute('owie_procesed', '1');
                     f.addEventListener("submit", handleFormSubmit);
@@ -213,7 +216,7 @@
                 });
         }
         window.addEventListener('DOMContentLoaded', rescanContent);
-        window.addEventListener('load', handleNavBar);
+        // window.addEventListener('submit', handleNavBar);
     </script>
 </head>
 
@@ -335,6 +338,9 @@
                 </tr>
             </table>
             <hr>
+        </div>
+        <div id="navBar" style="text-align:right;font-size:11px;">
+            <hr>
             <ul>
                 <li>
                     <form action="/">
@@ -357,12 +363,6 @@
                     </form>
                 </li>
             </ul>
-        </div>
-        <div id="homeButton" style="text-align:right;font-size:11px;">
-            <hr>
-            <form action="/">
-                <button>Back</button>
-            </form>
         </div>
     </div>
 </body>
